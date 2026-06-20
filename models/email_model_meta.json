@@ -1,0 +1,32 @@
+{
+  "feature_names": [
+    "action_word_count",
+    "avg_word_length",
+    "caps_ratio",
+    "char_count",
+    "digit_ratio",
+    "exclamation_count",
+    "financial_word_count",
+    "has_action_word",
+    "has_financial_content",
+    "has_greeting",
+    "has_ip_url",
+    "has_reward",
+    "has_signature",
+    "has_threat",
+    "has_unsubscribe",
+    "has_urgency",
+    "has_url",
+    "phishing_signal_count",
+    "question_count",
+    "requests_sensitive_data",
+    "reward_word_count",
+    "sensitive_data_word_count",
+    "sentence_count",
+    "threat_word_count",
+    "urgency_word_count",
+    "url_count",
+    "word_count"
+  ],
+  "accuracy": 1.0
+}

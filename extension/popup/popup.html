@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhishGuard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 360px;
+      min-height: 200px;
+      background: #0f0f1a;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid #1e1e2e;
+      background: #0d0d1a;
+    }
+    .header-logo { font-size: 22px; }
+    .header-title { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; }
+    .header-subtitle { font-size: 11px; color: #666; }
+    .header-status {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: #27ae60;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #27ae60;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .status-dot.offline { background: #e74c3c; animation: none; }
+
+    /* ── Score section ──────────────────────────────────────────── */
+    .score-section {
+      padding: 20px 16px;
+      text-align: center;
+    }
+
+    .risk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .risk-badge.safe       { background: #0d2e1a; color: #27ae60; border: 1px solid #27ae60; }
+    .risk-badge.suspicious { background: #2e1a0d; color: #e67e22; border: 1px solid #e67e22; }
+    .risk-badge.phishing   { background: #2e0d0d; color: #e74c3c; border: 1px solid #e74c3c; }
+    .risk-badge.scanning   { background: #1a1a2e; color: #7f8c8d; border: 1px solid #2d2d4e; }
+
+    .score-ring {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 12px;
+    }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring circle.bg   { fill: none; stroke: #1e1e2e; stroke-width: 8; }
+    .score-ring circle.fill {
+      fill: none; stroke-width: 8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.6s ease, stroke 0.4s;
+    }
+    .score-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-number { font-size: 28px; font-weight: 800; line-height: 1; }
+    .score-label  { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+    .current-url {
+      font-size: 11px;
+      color: #555;
+      word-break: break-all;
+      padding: 0 20px;
+      margin-bottom: 4px;
+    }
+
+    /* ── Reasons list ───────────────────────────────────────────── */
+    .reasons-section { padding: 0 16px 16px; }
+    .reasons-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+    .reason-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 7px 10px;
+      background: #13131f;
+      border-radius: 8px;
+      margin-bottom: 5px;
+      font-size: 12px;
+      color: #ccc;
+      border-left: 3px solid transparent;
+    }
+    .reason-item.phishing   { border-left-color: #e74c3c; }
+    .reason-item.suspicious { border-left-color: #e67e22; }
+    .reason-item.safe       { border-left-color: #27ae60; }
+    .reason-icon { flex-shrink: 0; font-size: 13px; }
+
+    /* ── Brand impersonation ────────────────────────────────────── */
+    .brand-section {
+      margin: 0 16px 12px;
+      padding: 10px 14px;
+      background: #1a0d0d;
+      border: 1px solid #e74c3c44;
+      border-radius: 10px;
+    }
+    .brand-header { font-size: 11px; color: #e74c3c; font-weight: 600; margin-bottom: 4px; }
+    .brand-value  { font-size: 13px; font-weight: 600; }
+    .brand-score  { font-size: 11px; color: #888; }
+
+    /* ── Tabs ───────────────────────────────────────────────────── */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #1e1e2e;
+      background: #0d0d1a;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      background: none;
+      border: none;
+      color: #555;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .tab-btn.active { color: #7c6bef; border-bottom-color: #7c6bef; }
+    .tab-btn:hover  { color: #aaa; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Email scanner ──────────────────────────────────────────── */
+    .email-section { padding: 14px 16px; }
+    .email-textarea {
+      width: 100%;
+      height: 100px;
+      background: #13131f;
+      border: 1px solid #2d2d4e;
+      border-radius: 8px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 12px;
+      padding: 10px;
+      resize: vertical;
+      outline: none;
+    }
+    .email-textarea:focus { border-color: #7c6bef; }
+    .email-textarea::placeholder { color: #444; }
+
+    .btn-scan {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      background: #7c6bef;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-scan:hover    { background: #6a5bd6; }
+    .btn-scan:disabled { background: #2d2d4e; color: #555; cursor: not-allowed; }
+
+    .email-result {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      display: none;
+    }
+    .email-result.phishing  { background: #1a0d0d; border: 1px solid #e74c3c44; }
+    .email-result.legit     { background: #0d1a0d; border: 1px solid #27ae6044; }
+    .email-result-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .email-result-conf  { font-size: 12px; color: #888; margin-bottom: 8px; }
+    .email-reason-list  { list-style: none; padding: 0; font-size: 11px; color: #bbb; }
+    .email-reason-list li { margin: 4px 0; }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    .footer {
+      padding: 10px 16px;
+      border-top: 1px solid #1e1e2e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #444;
+    }
+
+    /* ── Loading ─────────────────────────────────────────────────── */
+    .loader {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      color: #555;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid #2d2d4e;
+      border-top-color: #7c6bef;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-logo">🛡️</div>
+  <div>
+    <div class="header-title">PhishGuard</div>
+    <div class="header-subtitle">AI Phishing Detector</div>
+  </div>
+  <div class="header-status" id="api-status">
+    <div class="status-dot" id="status-dot"></div>
+    <span id="status-text">Active</span>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab-btn active" data-tab="url-tab">🔗 URL Scan</button>
+  <button class="tab-btn" data-tab="email-tab">✉️ Email Scan</button>
+</div>
+
+<!-- URL Tab -->
+<div class="tab-panel active" id="url-tab">
+  <div id="loading-state" class="loader">
+    <div class="spinner"></div>
+    Scanning current page...
+  </div>
+
+  <div id="result-state" style="display:none;">
+    <div class="score-section">
+      <!-- Risk badge -->
+      <div class="risk-badge safe" id="risk-badge">
+        <span id="badge-icon">✓</span>
+        <span id="badge-text">Safe</span>
+      </div>
+
+      <!-- Score ring -->
+      <div class="score-ring">
+        <svg viewBox="0 0 110 110" width="110" height="110">
+          <circle class="bg" cx="55" cy="55" r="47" />
+          <circle class="fill" id="score-circle"
+            cx="55" cy="55" r="47"
+            stroke-dasharray="295.31"
+            stroke-dashoffset="295.31"
+            stroke="#27ae60"
+          />
+        </svg>
+        <div class="score-text">
+          <span class="score-number" id="score-number">—</span>
+          <span class="score-label">/ 100</span>
+        </div>
+      </div>
+
+      <div class="current-url" id="current-url"></div>
+    </div>
+
+    <!-- Brand impersonation -->
+    <div class="brand-section" id="brand-section" style="display:none;">
+      <div class="brand-header">⚠️ Brand Impersonation Detected</div>
+      <div class="brand-value" id="brand-name"></div>
+      <div class="brand-score" id="brand-score-text"></div>
+    </div>
+
+    <!-- Reasons -->
+    <div class="reasons-section" id="reasons-section"></div>
+  </div>
+
+  <div id="error-state" style="display:none; padding:20px 16px; text-align:center; color:#e74c3c; font-size:13px;">
+    ⚠️ Could not connect to PhishGuard API.<br>
+    <span style="color:#555; font-size:11px;">Make sure the backend is running on port 8000</span>
+  </div>
+</div>
+
+<!-- Email Tab -->
+<div class="tab-panel" id="email-tab">
+  <div class="email-section">
+    <textarea
+      class="email-textarea"
+      id="email-input"
+      placeholder="Paste suspicious email content here to analyze..."
+    ></textarea>
+    <button class="btn-scan" id="scan-email-btn">Analyze Email</button>
+
+    <div class="email-result" id="email-result">
+      <div class="email-result-title" id="email-result-title"></div>
+      <div class="email-result-conf" id="email-result-conf"></div>
+      <ul class="email-reason-list" id="email-reason-list"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <span>PhishGuard v1.0</span>
+  <span id="scanned-at"></span>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhishGuard — Threat Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="frame">
+
+  <!-- ── Sidebar ───────────────────────────────────────── -->
+  <aside class="rail">
+    <div class="brand">
+      <span class="brand-mark">▣</span>
+      <div class="brand-text">
+        <span class="brand-name">PHISHGUARD</span>
+        <span class="brand-sub">Threat Console</span>
+      </div>
+    </div>
+
+    <nav class="nav" id="tabNav">
+      <button class="nav-item active" data-tab="url-scanner">
+        <span class="nav-label">URL Scan</span>
+        <span class="nav-hint">inspect a link</span>
+      </button>
+      <button class="nav-item" data-tab="email-scanner">
+        <span class="nav-label">Email Scan</span>
+        <span class="nav-hint">inspect a message</span>
+      </button>
+      <button class="nav-item" data-tab="health">
+        <span class="nav-label">System Status</span>
+        <span class="nav-hint">model + API health</span>
+      </button>
+    </nav>
+
+    <div class="rail-footer">
+      <div class="status-pill" id="apiStatusPill">
+        <span class="status-dot" id="apiStatusDot"></span>
+        <span id="apiStatusText">checking…</span>
+      </div>
+      <div class="rail-version">v1.0.0</div>
+    </div>
+  </aside>
+
+  <!-- ── Main ──────────────────────────────────────────── -->
+  <main class="stage">
+
+    <section id="url-scanner" class="panel active">
+      <header class="panel-head">
+        <h1>URL Scan</h1>
+        <p>Paste a link to check it for phishing signals — domain reputation, brand spoofing, and structural red flags.</p>
+      </header>
+
+      <div class="prompt-bar">
+        <span class="prompt-glyph">›</span>
+        <input type="text" id="urlInput" class="prompt-input" placeholder="https://example.com/login" autocomplete="off" spellcheck="false">
+        <button id="urlScanBtn" class="run-btn">Run Scan</button>
+      </div>
+      <button class="sample-link" id="urlSampleBtn">try a known-bad sample →</button>
+
+      <div id="urlResult" class="readout-zone"></div>
+    </section>
+
+    <section id="email-scanner" class="panel">
+      <header class="panel-head">
+        <h1>Email Scan</h1>
+        <p>Paste the body of a suspicious email. The model reads for urgency, threats, credential requests, and other social-engineering patterns.</p>
+      </header>
+
+      <div class="prompt-bar prompt-bar--block">
+        <textarea id="emailInput" class="prompt-textarea" placeholder="Paste email text here…" rows="6" spellcheck="false"></textarea>
+      </div>
+      <div class="action-row">
+        <button class="sample-link" id="emailSampleBtn">try a known-bad sample →</button>
+        <button id="emailScanBtn" class="run-btn">Run Scan</button>
+      </div>
+
+      <div id="emailResult" class="readout-zone"></div>
+    </section>
+
+    <section id="health" class="panel">
+      <header class="panel-head">
+        <h1>System Status</h1>
+        <p>Live health check against the FastAPI backend and the two loaded classifiers.</p>
+      </header>
+
+      <button id="healthBtn" class="run-btn run-btn--secondary">Refresh Status</button>
+      <div id="healthResult" class="readout-zone"></div>
+    </section>
+
+    <footer class="stage-footer">
+      <span class="footer-key">NOTE</span>
+      <span>Risk scores are model output, not a guarantee. Always verify suspicious links and messages independently.</span>
+    </footer>
+
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
