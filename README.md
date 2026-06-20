@@ -313,10 +313,10 @@ Trained on a small synthetic set of 40 labeled examples (20 phishing / 20 legiti
 
 ---
 
-## License
+## Author
 
-MIT — see [LICENSE](LICENSE) for details. *(Add a `LICENSE` file if one isn't present yet.)*
+Disha Grover
 
----
+B.Tech Student | Cybersecurity & AI Enthusiast
 
-*Built as a portfolio project demonstrating applied ML, NLP feature engineering, and full-stack security tooling.*
+Feel free to explore the project, raise issues, or suggest improvements.
