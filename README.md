@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # PhishGuard
 
 **AI-powered phishing detection for URLs and emails — FastAPI backend, scikit-learn classifiers, a browser extension, and a web dashboard.**
@@ -53,23 +52,23 @@ PhishGuard inspects URLs and email text for phishing indicators and returns an e
 
 **A phishing email, flagged with its actual signals.** This one was a classic prize-scam template — the model picked up the urgency language, the call to action, the all-caps shouting, and the exclamation-mark spam, and landed on 99.8% confidence.
 
-![Email scan result — phishing](docs/screenshots/Screenshot%202026-06-20%20230308.png)
+![Email scan result — phishing](docs/screenshots/email-scan-phishing.png)
 
 **A spoofed Bank of America login page.** The URL uses a `.tk` domain and the word "secure," but what actually pushes this one over the edge is the brand-impersonation check — the domain scores 90% similarity to "bankofamerica," which gets called out as its own warning box instead of just being buried in the indicator list.
 
-![URL scan result — phishing with brand impersonation](docs/screenshots/Screenshot%202026-06-20%20230649.png)
+![URL scan result — phishing with brand impersonation](docs/screenshots/url-scan-phishing.png)
 
 **A legitimate GitHub URL, correctly left alone.** This is the trusted-domain whitelist doing its job — instead of running the full model and risking a false positive on a well-known domain, it short-circuits straight to a 2/100 risk score with a one-line explanation.
 
-![URL scan result — safe](docs/screenshots/Screenshot%202026-06-20%20230714.png)
+![URL scan result — safe](docs/screenshots/url-scan-safe.png)
 
 **A normal work email, correctly read as harmless.** No urgency, no threats, no link-bait — zero of the six phishing signals fire, and the dashboard says so plainly instead of forcing a score where there isn't one.
 
-![Email scan result — legitimate](docs/screenshots/Screenshot%202026-06-20%20230743.png)
+![Email scan result — legitimate](docs/screenshots/email-scan-legitimate.png)
 
 **The system status panel**, for when you just want to confirm both classifiers actually loaded and the API is reachable before you start scanning anything.
 
-![System status panel](docs/screenshots/Screenshot%202026-06-20%20230806.png)
+![System status panel](docs/screenshots/system-status.png)
 
 ---
 
@@ -321,6 +320,3 @@ MIT — see [LICENSE](LICENSE) for details. *(Add a `LICENSE` file if one isn't 
 ---
 
 *Built as a portfolio project demonstrating applied ML, NLP feature engineering, and full-stack security tooling.*
-=======
-# AI-Powered-Phishing-Detection-System
->>>>>>> affee94fb8ebd395843ea53b4457e056958cdb25
